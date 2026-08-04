@@ -1,3 +1,4 @@
+import Login from "./pages/Login";
 import Revisao from "./pages/Revisao";
 import Configuracoes from "./pages/Configuracoes";
 import Estatisticas from "./pages/Estatisticas";
@@ -5,7 +6,7 @@ import { useState } from "react";
 import "./App.css";
 import { questions } from "./data/questions";
 import Questoes from "./pages/Questoes";
-
+import ProfessorVirtual from "./components/ProfessorVirtual";
 type MenuItem =
   | "Painel"
   | "Questões"
@@ -20,8 +21,14 @@ function App() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [finished, setFinished] = useState(false);
   const [copied, setCopied] = useState(false);
+const [logged, setLogged] = useState(
+  localStorage.getItem("ibgp-login") === "true"
+);
 
-  const menu: MenuItem[] = [
+if (!logged) {
+  return <Login onLogin={() => setLogged(true)} />;
+}
+const menu: MenuItem[] = [
     "Painel",
     "Questões",
     "Simulados",
@@ -117,24 +124,6 @@ ${answerText}`;
   }
 
   function renderDashboard() {
-    let dicaProfessor = "";
-
-if (!finished) {
-  dicaProfessor =
-    "Resolva pelo menos 20 questões para receber uma análise completa.";
-} else if (percentage < 50) {
-  dicaProfessor =
-    "Seu aproveitamento está abaixo de 50%. Revise a teoria antes de continuar.";
-} else if (percentage < 70) {
-  dicaProfessor =
-    "Você está evoluindo. Agora revise apenas as questões erradas.";
-} else if (percentage < 90) {
-  dicaProfessor =
-    "Ótimo desempenho. Faça simulados completos para ganhar velocidade.";
-} else {
-  dicaProfessor =
-    "Excelente desempenho. Aumente a dificuldade das questões e mantenha o ritmo.";
-}
     return (
       <>
         <section className="cards">
@@ -493,20 +482,10 @@ if (!finished) {
     background: "#eff6ff",
     border: "1px solid #bfdbfe",
   }}
->
-  <h2 style={{ marginTop: 0 }}>
+>  <h2 style={{ marginTop: 0 }}>
     🤖 Professor Virtual
   </h2>
-
- <p style={{ lineHeight: 1.8 }}>
-  {dicaProfessor}
-</p>
-  <ul style={{ lineHeight: 2 }}>
-    <li>✅ Revise primeiro os erros.</li>
-    <li>✅ Depois faça um novo simulado.</li>
-    <li>✅ Comece pelas questões fáceis.</li>
-    <li>✅ Termine pelas difíceis.</li>
-  </ul>
+ <ProfessorVirtual percentual={percentage} />
 </section>
 
         <section className="destaque">

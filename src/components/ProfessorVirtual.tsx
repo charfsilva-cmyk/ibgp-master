@@ -2,52 +2,130 @@ type Props = {
   percentual: number;
 };
 
+type FaixaDesempenho = {
+  titulo: string;
+  mensagem: string;
+  cor: string;
+  fundo: string;
+  borda: string;
+};
+
 export default function ProfessorVirtual({ percentual }: Props) {
-  let titulo = "";
-  let mensagem = "";
+  let resultado: FaixaDesempenho;
 
   if (percentual >= 90) {
-    titulo = "🏆 Excelente!";
-    mensagem =
-      "Seu desempenho está excelente. Continue resolvendo simulados completos para manter o nível.";
+    resultado = {
+      titulo: "🏆 Excelente!",
+      mensagem:
+        "Seu desempenho está excelente. Continue resolvendo simulados completos para manter o nível.",
+      cor: "#166534",
+      fundo: "#f0fdf4",
+      borda: "#86efac",
+    };
   } else if (percentual >= 75) {
-    titulo = "😊 Muito bom!";
-    mensagem =
-      "Você está evoluindo bem. Revise apenas as questões erradas antes de seguir.";
+    resultado = {
+      titulo: "😊 Muito bom!",
+      mensagem:
+        "Você está evoluindo bem. Revise apenas as questões erradas antes de seguir.",
+      cor: "#1d4ed8",
+      fundo: "#eff6ff",
+      borda: "#93c5fd",
+    };
   } else if (percentual >= 60) {
-    titulo = "📚 Atenção";
-    mensagem =
-      "Seu desempenho é bom, mas ainda há espaço para melhorar. Faça revisões frequentes.";
+    resultado = {
+      titulo: "📚 Atenção",
+      mensagem:
+        "Seu desempenho é bom, mas ainda há espaço para melhorar. Faça revisões frequentes.",
+      cor: "#a16207",
+      fundo: "#fefce8",
+      borda: "#fde047",
+    };
   } else if (percentual >= 40) {
-    titulo = "⚠️ Precisa reforçar";
-    mensagem =
-      "Recomendamos voltar à teoria e resolver questões fáceis antes de avançar.";
+    resultado = {
+      titulo: "⚠️ Precisa reforçar",
+      mensagem:
+        "Recomendamos voltar à teoria e resolver questões fáceis antes de avançar.",
+      cor: "#c2410c",
+      fundo: "#fff7ed",
+      borda: "#fdba74",
+    };
   } else {
-    titulo = "🚨 Hora de revisar";
-    mensagem =
-      "Seu aproveitamento ainda está baixo. Revise a teoria e pratique diariamente.";
+    resultado = {
+           titulo: "🎯 Comece seus estudos",
+mensagem:
+  "Você ainda não possui respostas registradas. Resolva algumas questões para receber uma análise do seu desempenho.",
+      cor: "#b91c1c",
+      fundo: "#fef2f2",
+      borda: "#fca5a5",
+    };
   }
 
   return (
     <div
       style={{
         marginTop: 20,
-        padding: 20,
+        padding: 24,
         borderRadius: 14,
-        background: "#eff6ff",
-        border: "1px solid #bfdbfe",
+        background: resultado.fundo,
+        border: `2px solid ${resultado.borda}`,
+        color: "#111827",
+        boxShadow: "0 4px 14px rgba(15, 23, 42, 0.08)",
       }}
     >
-      <h3>{titulo}</h3>
+      <h3
+        style={{
+          margin: 0,
+          color: resultado.cor,
+          fontSize: 20,
+          fontWeight: 700,
+        }}
+      >
+        {resultado.titulo}
+      </h3>
 
       <p
         style={{
-          marginTop: 10,
-          lineHeight: 1.8,
+          marginTop: 12,
+          marginBottom: 0,
+          lineHeight: 1.7,
+          color: "#374151",
+          fontSize: 16,
+          fontWeight: 500,
         }}
       >
-        {mensagem}
+        {resultado.mensagem}
       </p>
+
+      <div
+        style={{
+          marginTop: 18,
+          height: 8,
+          borderRadius: 999,
+          background: "#e5e7eb",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            width: `${Math.min(100, Math.max(0, percentual))}%`,
+            height: "100%",
+            borderRadius: 999,
+            background: resultado.cor,
+            transition: "width 0.3s ease",
+          }}
+        />
+      </div>
+
+      <small
+        style={{
+          display: "block",
+          marginTop: 8,
+          color: "#475569",
+          fontWeight: 600,
+        }}
+      >
+        Aproveitamento atual: {percentual}%
+      </small>
     </div>
   );
 }

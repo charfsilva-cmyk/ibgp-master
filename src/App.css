@@ -791,4 +791,25 @@ button {
   background: linear-gradient(135deg, #7c3aed, #4f46e5) !important;
   color: #ffffff !important;
   border-color: #c4b5fd !important;
+/* CORREÇÃO DO CARD PROFESSOR VIRTUAL NO PAINEL */
+.professor-virtual,
+.professor-card {
+  background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
 }
+.professor-virtual h1,
+.professor-virtual h2,
+.professor-virtual h3,
+.professor-virtual p,
+.professor-virtual span,
+.professor-virtual li,
+.professor-card h1,
+.professor-card h2,
+.professor-card h3,
+.professor-card p,
+.professor-card span,
+.professor-card li {
+  color: #f8fafc !important;
+  opacity: 1 !important;
+}}
