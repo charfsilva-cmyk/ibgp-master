@@ -1,0 +1,45 @@
+:root {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body,
+#root {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+}.filter-bar {
+  display: flex;
+  gap: 16px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 12px;
+  border: 1px solid #d9dee8;
+  border-radius: 10px;
+  font-size: 15px;
+  background: white;
+}
+
+.filter-bar input {
+  flex: 1;
+  min-width: 260px;
+}
+
+.filter-bar select {
+  width: 220px;
+}
+
+.texto-secundario {
+  color: #64748b;
+  margin-top: 10px;
+}
