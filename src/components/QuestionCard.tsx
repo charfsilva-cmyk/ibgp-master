@@ -247,8 +247,8 @@ export default function QuestionCard({ question }: Props) {
           >
             Última resposta: {progresso.ultimaResposta}
           </small>
-        </div>
-      )}
+                  </div>
+              )}
     </div>
   );
 }

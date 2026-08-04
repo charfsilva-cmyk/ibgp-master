@@ -39,6 +39,11 @@ export default function Questoes() {
   });
 
   if (questaoAberta) {
+    const indiceAtual = filteredQuestions.findIndex(
+  (item) => item.id === questaoAberta.id
+);
+
+const proximaQuestao = filteredQuestions[indiceAtual + 1];
     return (
       <section className="pagina-vazia">
         <button
@@ -50,6 +55,45 @@ export default function Questoes() {
         </button>
 
         <QuestionCard question={questaoAberta} />
+        {proximaQuestao ? (
+  <button
+    type="button"
+    className="botao-principal"
+    onClick={() => {
+      setQuestaoAberta(proximaQuestao);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }}
+    style={{
+      marginTop: 20,
+      width: "100%",
+      padding: 14,
+      border: "none",
+      borderRadius: 10,
+      background: "#4f46e5",
+      color: "#ffffff",
+      fontSize: 16,
+      fontWeight: 700,
+      cursor: "pointer",
+    }}
+  >
+    Próxima questão →
+  </button>
+) : (
+  <button
+    type="button"
+    className="botao-secundario"
+    onClick={() => setQuestaoAberta(null)}
+    style={{
+      marginTop: 20,
+      width: "100%",
+      padding: 14,
+      borderRadius: 10,
+      cursor: "pointer",
+    }}
+  >
+    Finalizar e voltar ao banco
+  </button>
+)}
       </section>
     );
   }
