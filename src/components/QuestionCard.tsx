@@ -212,13 +212,7 @@ export default function QuestionCard({ question }: Props) {
         </div>
       )}
 
-  {answered && (
-  <ProfessorVirtual
-    acertou={selected === question.correta}
-    dificuldade={question.dificuldade}
-    materia={question.materia}
-  />
-)}
+ 
 {progresso && (
         <div
           style={{
