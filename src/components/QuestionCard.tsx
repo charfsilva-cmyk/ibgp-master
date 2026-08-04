@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { Question } from "../types/question";
-import ProfessorVirtual from "./ProfessorVirtual";
 import {
   obterProgressoQuestao,
   salvarResposta,
