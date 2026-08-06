@@ -1,3 +1,4 @@
+import professor from "../assets/professor/professor.png";
 type Props = {
   percentual: number;
 };
@@ -71,7 +72,50 @@ mensagem:
         color: "#111827",
         boxShadow: "0 4px 14px rgba(15, 23, 42, 0.08)",
       }}
+    ><div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: 18,
+    marginBottom: 18,
+  }}
+>
+  <img
+    src={professor}
+    alt="Professor Virtual"
+    style={{
+      width: 120,
+      height: 120,
+      objectFit: "cover",
+      borderRadius: 18,
+      border: "3px solid #6366f1",
+      boxShadow: "0 8px 24px rgba(79, 70, 229, 0.25)",
+    }}
+  />
+
+  <div>
+    <strong
+      style={{
+        display: "block",
+        fontSize: 24,
+        color: "#1e1b4b",
+      }}
     >
+      🤖 Professor Virtual
+    </strong>
+
+    <span
+      style={{
+        display: "block",
+        marginTop: 6,
+        color: "#64748b",
+        fontSize: 15,
+      }}
+    >
+      Seu mentor de estudos
+    </span>
+  </div>
+</div>
       <h3
         style={{
           margin: 0,
