@@ -84,10 +84,11 @@ mensagem:
     src={professor}
     alt="Professor Virtual"
     style={{
-      width: 120,
-      height: 120,
-      objectFit: "cover",
-      borderRadius: 18,
+      width: 180,
+height: 180,
+objectFit: "contain",
+background: "#0f172a",
+     borderRadius: 24,
       border: "3px solid #6366f1",
       boxShadow: "0 8px 24px rgba(79, 70, 229, 0.25)",
     }}
