@@ -14,23 +14,25 @@ type MenuItem = "Painel" | "Estudar" | "Questões" | "Simulados" | "Estatística
 
 export default function App() {
   const [pagina, setPagina] = useState<MenuItem>("Painel");
-  const [logged, setLogged] = useState(localStorage.getItem("ibgp-login") === "true");
+  const [logged, setLogged] = useState(localStorage.getItem("pcmg-login") === "true" || localStorage.getItem("ibgp-login") === "true");
 
   if (!logged) return <Login onLogin={() => setLogged(true)} />;
 
   const menu: MenuItem[] = ["Painel", "Estudar", "Questões", "Simulados", "Estatísticas", "Revisão", "Configurações"];
   const erros = JSON.parse(localStorage.getItem("pcmg-erros") ?? "[]") as number[];
-  const favoritas = JSON.parse(localStorage.getItem("ibgp-favorites") ?? "[]") as number[];
+  const favoritas = JSON.parse(localStorage.getItem("pcmg-favorites") ?? localStorage.getItem("ibgp-favorites") ?? "[]") as number[];
+  const nomeAluno = localStorage.getItem("pcmg-user-name") ?? localStorage.getItem("ibgp-user-name") ?? "Charles";
+  const cargoAluno = localStorage.getItem("pcmg-cargo") ?? "Investigador";
 
   return <div className="app">
     <aside className="sidebar">
       <div className="logo"><span className="logo-icon">PC</span><div><strong>PCMG Master</strong><small>Preparação independente</small></div></div>
       <nav className="menu">{menu.map(item => <button key={item} className={pagina === item ? "menu-item ativo" : "menu-item"} onClick={() => setPagina(item)}>{item}</button>)}</nav>
-      <div className="perfil"><div className="avatar">CS</div><div><strong>Charles</strong><small>Aluno</small></div></div>
+      <div className="perfil"><div className="avatar">{nomeAluno.slice(0,2).toUpperCase()}</div><div><strong>{nomeAluno}</strong><small>{cargoAluno}</small></div></div>
     </aside>
 
     <main className="conteudo">
-      <header className="topo"><div><p className="saudacao">Olá, Charles</p><h1>{pagina}</h1></div><button className="modo" type="button">☾</button></header>
+      <header className="topo"><div><p className="saudacao">Olá, {nomeAluno}</p><h1>{pagina}</h1></div><button className="modo" type="button">☾</button></header>
 
       {pagina === "Painel" && <>
         <section className="cards">
