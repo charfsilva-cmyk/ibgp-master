@@ -13,10 +13,13 @@ type Props = {
 export default function QuestionCard({ question }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
+  const [favorita,setFavorita]=useState(()=>{const ids=JSON.parse(localStorage.getItem("pcmg-favorites")??localStorage.getItem("ibgp-favorites")??"[]") as number[];return ids.includes(question.id)});
 
   const [progresso, setProgresso] = useState<ProgressoQuestao | null>(
     obterProgressoQuestao(question.id),
   );
+
+  function alternarFavorita(){const ids=JSON.parse(localStorage.getItem("pcmg-favorites")??localStorage.getItem("ibgp-favorites")??"[]") as number[];const novos=favorita?ids.filter(id=>id!==question.id):[...new Set([...ids,question.id])];localStorage.setItem("pcmg-favorites",JSON.stringify(novos));setFavorita(!favorita)}
 
   function responderQuestao() {
     if (selected === null || answered) {
@@ -119,6 +122,7 @@ export default function QuestionCard({ question }: Props) {
         >
           {question.dificuldade}
         </span>
+        <button type="button" onClick={alternarFavorita} className="favorite-question" title={favorita?"Remover dos favoritos":"Adicionar aos favoritos"}>{favorita?"★ Favorita":"☆ Favoritar"}</button>
       </div>
 
       <h2
