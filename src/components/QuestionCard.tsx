@@ -27,12 +27,13 @@ export default function QuestionCard({ question }: Props) {
     const novoProgresso = salvarResposta(question.id, acertou);
 
     setProgresso(novoProgresso);
+    if (!acertou) { const erros=JSON.parse(localStorage.getItem("pcmg-erros")??"[]") as number[]; localStorage.setItem("pcmg-erros",JSON.stringify([...new Set([...erros,question.id])])); }
     setAnswered(true);
   }
 
   function corAlternativa(index: number) {
     if (!answered) {
-      return selected === index ? "#dbeafe" : "#ffffff";
+      return selected === index ? "#173b62" : "#102b49";
     }
 
     if (index === question.correta) {
@@ -43,7 +44,7 @@ export default function QuestionCard({ question }: Props) {
       return "#fee2e2";
     }
 
-    return "#ffffff";
+    return "#102b49";
   }
 
   function bordaAlternativa(index: number) {
@@ -67,7 +68,7 @@ export default function QuestionCard({ question }: Props) {
   return (
     <div
       style={{
-        background: "#ffffff",
+        background: "#0a1c33",
         padding: 24,
         borderRadius: 14,
         marginTop: 20,
@@ -100,7 +101,7 @@ export default function QuestionCard({ question }: Props) {
             padding: "6px 10px",
             borderRadius: 8,
             background: "#f1f5f9",
-            color: "#475569",
+            color: "#cbd5e1",
             fontSize: 13,
           }}
         >
@@ -124,7 +125,7 @@ export default function QuestionCard({ question }: Props) {
         style={{
           margin: "0 0 20px",
           lineHeight: 1.5,
-          color: "#172033",
+          color: "#f8fafc",
         }}
       >
         {question.pergunta}
@@ -146,7 +147,7 @@ export default function QuestionCard({ question }: Props) {
             cursor: answered ? "default" : "pointer",
             border: bordaAlternativa(index),
             background: corAlternativa(index),
-            color: "#172033",
+            color: "#f8fafc",
           }}
         >
           <strong>{String.fromCharCode(65 + index)}.</strong>{" "}
@@ -218,7 +219,7 @@ export default function QuestionCard({ question }: Props) {
             marginTop: 18,
             padding: 14,
             borderRadius: 10,
-            background: "#f8fafc",
+            background: "#102b49",
             border: "1px solid #e2e8f0",
             color: "#475569",
           }}
