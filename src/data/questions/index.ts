@@ -8,6 +8,7 @@ import { administrativoQuestions } from "./administrativo";
 import { mariaPenhaQuestions } from "./mariaPenha";
 import { ecaQuestions } from "./eca";
 import { pcmgEspecificasQuestions } from "./pcmgEspecificas";
+import { fgvTreinoQuestions } from "./fgvTreino";
 
 /*
  * Banco ativo do PCMG Master.
@@ -29,12 +30,14 @@ const pcmgBase = [
   ...mariaPenhaQuestions,
   ...ecaQuestions,
   ...pcmgEspecificasQuestions,
+  ...fgvTreinoQuestions,
 ];
 
 export const questions = pcmgBase.map((question) => ({
   ...question,
   cargo: question.cargo ?? "Ambos",
   origem: question.origem ?? "Inédita",
+  nivel: question.nivel ?? (question.dificuldade === "Fácil" ? "Básica" : "Intermediária"),
   banca:
     question.banca.toLowerCase().includes("ibgp") ||
     question.banca.toLowerCase().includes("adapt")
