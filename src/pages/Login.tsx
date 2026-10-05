@@ -9,7 +9,8 @@ export default function Login({ onLogin }: Props) {
   const [senha, setSenha] = useState("");
 
   function entrar() {
-    if (usuario === "admin" && senha === "123456") {
+    if (usuario.trim().toLowerCase() === "admin" && senha.trim() === "123456") {
+      localStorage.setItem("pcmg-login", "true");
       localStorage.setItem("ibgp-login", "true");
       onLogin();
     } else {
@@ -62,6 +63,8 @@ export default function Login({ onLogin }: Props) {
             marginTop: 12,
           }}
         />
+
+        <div style={{marginTop:16,padding:12,borderRadius:10,background:"#f1f5f9",color:"#172033"}}><small>Usuário</small><strong style={{display:"block"}}>admin</strong><small>Senha</small><strong style={{display:"block"}}>123456</strong></div>
 
         <button
           onClick={entrar}
