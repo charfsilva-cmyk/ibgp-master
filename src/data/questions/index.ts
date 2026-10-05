@@ -1,10 +1,4 @@
-import { estatutoServidoresQuestions } from "./estatutoServidores";
-import { leiOrganicaBrumadinhoQuestions } from "./leiOrganicaBrumadinho";
-import { historiaBrumadinhoQuestions } from "./historiaBrumadinho";
-import { geografiaBrumadinhoQuestions } from "./geografiaBrumadinho";
-import { estatutoGcmQuestions } from "./estatutoGcm";
 import { constitucionalQuestions } from "./constitucional";
-import { ctbQuestions } from "./ctb";
 import { direitosHumanosQuestions } from "./direitosHumanos";
 import { informaticaQuestions } from "./informatica";
 import { leiTorturaQuestions } from "./leiTortura";
@@ -13,9 +7,18 @@ import { portuguesQuestions } from "./portugues";
 import { administrativoQuestions } from "./administrativo";
 import { mariaPenhaQuestions } from "./mariaPenha";
 import { ecaQuestions } from "./eca";
-export const questions = [
+
+/*
+ * Banco ativo do PCMG Master.
+ * Mantemos apenas disciplinas aproveitáveis na preparação policial.
+ * Conteúdos municipais/GCM/Brumadinho e CTB permanecem no repositório
+ * histórico, mas não entram mais no banco exibido nem nos simulados PCMG.
+ *
+ * As questões herdadas são autorais/adaptadas e NÃO devem ser apresentadas
+ * como questões oficiais da PCMG. A identificação visual é ajustada abaixo.
+ */
+const pcmgBase = [
   ...constitucionalQuestions,
-  ...ctbQuestions,
   ...direitosHumanosQuestions,
   ...informaticaQuestions,
   ...leiTorturaQuestions,
@@ -23,9 +26,14 @@ export const questions = [
   ...portuguesQuestions,
   ...administrativoQuestions,
   ...mariaPenhaQuestions,
-...ecaQuestions,
-...estatutoGcmQuestions,
-...historiaBrumadinhoQuestions,
-...geografiaBrumadinhoQuestions,
-...leiOrganicaBrumadinhoQuestions,
-...estatutoServidoresQuestions,]
+  ...ecaQuestions,
+];
+
+export const questions = pcmgBase.map((question) => ({
+  ...question,
+  banca:
+    question.banca.toLowerCase().includes("ibgp") ||
+    question.banca.toLowerCase().includes("adapt")
+      ? "Inédita • estilo PCMG"
+      : question.banca,
+}));
