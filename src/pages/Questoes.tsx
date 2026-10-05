@@ -13,6 +13,7 @@ export default function Questoes() {
   const [banca, setBanca] = useState("");
   const [ano, setAno] = useState("");
   const [origem, setOrigem] = useState("");
+  const [nivel, setNivel] = useState("");
 
   const materias = [...new Set(questions.map((q) => q.materia))];
   const bancas = [...new Set(questions.map(q => q.banca))].sort();
@@ -50,11 +51,12 @@ export default function Questoes() {
     const correspondeBanca = banca === "" || question.banca.toUpperCase().includes(banca);
     const correspondeAno = ano === "" || dados.ano === ano;
     const correspondeOrigem = origem === "" || dados.origem === origem;
+    const correspondeNivel = nivel === "" || question.nivel === nivel;
 
     return (
       correspondeMateria &&
       correspondePesquisa &&
-      correspondeFavorita && correspondeCargo && correspondeBanca && correspondeAno && correspondeOrigem
+      correspondeFavorita && correspondeCargo && correspondeBanca && correspondeAno && correspondeOrigem && correspondeNivel
     );
   });
 
@@ -133,7 +135,7 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
         <div>
           <h2 style={{ margin: 0 }}>Banco de questões</h2>
 
-          <p className="texto-secundario">Questões PCMG organizadas por cargo, banca, ano, matéria e origem.</p>
+          <p className="texto-secundario">Questões PCMG organizadas por cargo, matéria, origem e nível de cobrança. “Padrão FGV” identifica questões inéditas inspiradas no estilo da banca, não questões oficiais.</p>
         </div>
 
         <div
@@ -154,6 +156,7 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
         <label>Banca<select value={banca} onChange={e=>setBanca(e.target.value)}><option value="">Todas</option>{bancas.map(x=><option key={x}>{x}</option>)}</select></label>
         <label>Ano<select value={ano} onChange={e=>setAno(e.target.value)}><option value="">Todos</option>{anos.map(x=><option key={x}>{x}</option>)}</select></label>
         <label>Origem<select value={origem} onChange={e=>setOrigem(e.target.value)}><option value="">Todas</option><option>Oficial</option><option>Inédita</option><option>Adaptada</option></select></label>
+        <label>Nível<select value={nivel} onChange={e=>setNivel(e.target.value)}><option value="">Todos</option><option>Básica</option><option>Intermediária</option><option>Padrão FGV</option><option>FGV avançada</option></select></label>
       </div>
 
       <FilterBar
@@ -318,6 +321,7 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
                 >
                   {item.dificuldade}
                 </span>
+                {item.nivel && <span className={`level-badge ${item.nivel.includes("FGV") ? "fgv-level" : ""}`}>{item.nivel}</span>}
 
                 <span
                   style={{
