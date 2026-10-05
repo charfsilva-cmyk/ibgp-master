@@ -47,3 +47,15 @@
 .study-cycle b{display:inline-flex;width:25px;height:25px;align-items:center;justify-content:center;border-radius:8px;background:rgba(212,175,82,.12);color:#e2c46d}
 @media(max-width:900px){.dashboard-shortcuts{grid-template-columns:1fr}.dashboard-hero{align-items:flex-start;flex-direction:column}.pcmg-focus{width:100%}}
 @media(max-width:560px){.study-cycle{grid-template-columns:1fr}.dashboard-actions>*{width:100%}}
+
+/* Estatísticas e revisão PCMG */
+.section-heading{margin-bottom:22px}.section-heading h2{margin:6px 0 8px}.section-heading p{color:#9fb0c5;margin:0}
+.stats-summary,.review-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:24px}
+.stat-card,.review-summary article{padding:20px;border-radius:16px;background:linear-gradient(145deg,rgba(13,39,68,.96),rgba(6,22,39,.98));border:1px solid rgba(148,163,184,.14)}
+.stat-card small,.review-summary small{display:block;color:#9fb0c5}.stat-card strong,.review-summary strong{display:block;margin-top:8px;font-size:28px;color:#e2c46d}
+.stats-list,.review-list{display:grid;gap:12px}.stats-list>h3{margin-bottom:4px}
+.subject-stat,.review-card{display:flex;justify-content:space-between;gap:18px;padding:18px 20px;border-radius:15px;background:rgba(9,31,53,.88);border:1px solid rgba(148,163,184,.13)}
+.subject-stat>div:first-child,.subject-score{display:flex;flex-direction:column;gap:5px}.subject-stat small,.subject-score small{color:#9fb0c5}.subject-score{text-align:right}.subject-score strong{color:#e2c46d;font-size:20px}
+.review-card{display:block}.review-meta{display:flex;align-items:center;gap:10px}.review-meta span{color:#e2c46d;font-weight:700}.review-meta small{color:#9fb0c5}.review-card h3{font-size:16px;line-height:1.5;margin:12px 0}.review-footer{display:flex;justify-content:space-between;gap:16px;color:#9fb0c5;font-size:13px}.review-tip{color:#cbd5e1}
+.empty-pcmg{display:flex;flex-direction:column;gap:6px;padding:28px;border:1px dashed rgba(212,175,82,.3);border-radius:16px;background:rgba(9,31,53,.55);color:#9fb0c5}.empty-pcmg strong{color:#f8fafc}
+@media(max-width:900px){.stats-summary,.review-summary{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.stats-summary,.review-summary{grid-template-columns:1fr}.subject-stat,.review-footer{flex-direction:column}.subject-score{text-align:left}}
