@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { questions } from "../data/questions";
 
 type Cargo = "Investigador" | "Escrivão";
@@ -11,9 +11,19 @@ export default function Simulados() {
   const [indice, setIndice] = useState(0);
   const [respostas, setRespostas] = useState<Record<number, number>>({});
   const [finalizado, setFinalizado] = useState(false);
+  const [segundos, setSegundos] = useState(4 * 60 * 60);
 
   const materias = useMemo(() => [...new Set(questions.map(q => q.materia))], []);
   const errosSalvos = JSON.parse(localStorage.getItem("pcmg-erros") ?? "[]") as number[];
+
+  useEffect(() => {
+    if (modo !== "prova" || finalizado) return;
+    if (segundos <= 0) { finalizar(); return; }
+    const timer = window.setInterval(() => setSegundos(s => s - 1), 1000);
+    return () => window.clearInterval(timer);
+  }, [modo, finalizado, segundos]);
+
+  const relogio = `${String(Math.floor(segundos / 3600)).padStart(2,"0")}:${String(Math.floor((segundos % 3600) / 60)).padStart(2,"0")}:${String(segundos % 60).padStart(2,"0")}`;
 
   const lista = useMemo(() => {
     if (modo === "materia" && materia) return questions.filter(q => q.materia === materia);
@@ -26,7 +36,7 @@ export default function Simulados() {
       alert("Seu caderno de erros ainda está vazio. Responda questões primeiro.");
       return;
     }
-    setModo(novoModo); setIndice(0); setRespostas({}); setFinalizado(false);
+    setModo(novoModo); setIndice(0); setRespostas({}); setFinalizado(false); setSegundos(4 * 60 * 60);
   }
 
   function finalizar() {
@@ -55,5 +65,5 @@ export default function Simulados() {
 
   if (finalizado) return <section className="result-page"><div className="result-header"><span className="result-label">{cargo} • PCMG Master</span><h2>Simulado finalizado</h2><p>Resultado geral do seu treino.</p></div><div className="result-cards"><article><span>Acertos</span><strong>{acertos}/{lista.length}</strong></article><article><span>Erros</span><strong>{lista.length-acertos}</strong></article><article><span>Aproveitamento</span><strong>{Math.round(acertos/lista.length*100)}%</strong></article></div><div className="resultado-materias"><h3>Desempenho por matéria</h3>{[...new Set(lista.map(q=>q.materia))].map(m=>{const qs=lista.filter(q=>q.materia===m);const ok=qs.filter(q=>respostas[q.id]===q.correta).length;return <div key={m}><span>{m}</span><strong>{ok}/{qs.length} • {Math.round(ok/qs.length*100)}%</strong></div>})}</div><button className="botao-principal" onClick={() => setModo(null)}>Voltar aos simulados</button></section>;
 
-  return <section className="simulado-execucao"><div className="simulado-bar"><button onClick={() => setModo(null)}>← Sair</button><div><strong>{modo === "prova" ? "Modo Prova PCMG / FGV" : `Simulado • ${cargo}`}</strong><small>{Object.keys(respostas).length} de {lista.length} respondidas</small></div><span>Questão {indice+1}/{lista.length}</span></div><div className="quiz-progress"><span style={{width:`${Object.keys(respostas).length/lista.length*100}%`}} /></div><article className="question-card"><span className="materia-badge">{atual.materia}</span><h2>{atual.pergunta}</h2><div className="alternativas">{atual.alternativas.map((op,i)=><button className={`option ${respostas[atual.id]===i?"selected":""}`} key={op} onClick={()=>setRespostas(r=>({...r,[atual.id]:i}))}><span>{String.fromCharCode(65+i)}</span><p>{op}</p></button>)}</div></article><div className="quiz-actions"><button className="navigation-button" disabled={indice===0} onClick={()=>setIndice(i=>i-1)}>Anterior</button>{indice<lista.length-1?<button className="next-button" onClick={()=>setIndice(i=>i+1)}>Próxima</button>:<button className="finish-button" onClick={finalizar}>Finalizar simulado</button>}</div></section>;
+  return <section className="simulado-execucao"><div className="simulado-bar"><button onClick={() => setModo(null)}>← Sair</button><div><strong>{modo === "prova" ? "Modo Prova PCMG / FGV" : `Simulado • ${cargo}`}</strong><small>{Object.keys(respostas).length} de {lista.length} respondidas</small></div>{modo === "prova" && <span className="prova-timer">⏱ {relogio}</span>}<span>Questão {indice+1}/{lista.length}</span></div><article className="question-card"><span className="materia-badge">{atual.materia}</span><h2>{atual.pergunta}</h2><div className="alternativas">{atual.alternativas.map((op,i)=><button className={`option ${respostas[atual.id]===i?"selected":""}`} key={op} onClick={()=>setRespostas(r=>({...r,[atual.id]:i}))}><span>{String.fromCharCode(65+i)}</span><p>{op}</p></button>)}</div></article><div className="quiz-actions"><button className="navigation-button" disabled={indice===0} onClick={()=>setIndice(i=>i-1)}>Anterior</button>{indice<lista.length-1?<button className="next-button" onClick={()=>setIndice(i=>i+1)}>Próxima</button>:<button className="finish-button" onClick={()=>{const faltam=lista.length-Object.keys(respostas).length;if(faltam>0&&!window.confirm(`Ainda existem ${faltam} questão(ões) sem resposta. Deseja finalizar mesmo assim?`))return;finalizar();}}>Finalizar simulado</button>}</div></section>;
 }
