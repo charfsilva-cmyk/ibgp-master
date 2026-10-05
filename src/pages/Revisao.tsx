@@ -1,109 +1,14 @@
 import { questions } from "../data/questions";
 import { obterProgressoQuestao } from "../utils/progress";
 
-export default function Revisao() {
-  const revisar = questions.filter((questao) => {
-    const progresso = obterProgressoQuestao(questao.id);
+export default function Revisao(){
+  const idsSimulado=JSON.parse(localStorage.getItem("pcmg-erros")??"[]") as number[];
+  const revisar=questions.filter(q=>{const p=obterProgressoQuestao(q.id);return (p&&p.erros>0)||idsSimulado.includes(q.id)});
+  const porMateria=revisar.reduce<Record<string,number>>((a,q)=>{a[q.materia]=(a[q.materia]||0)+1;return a},{});
 
-    return progresso && progresso.erros > 0;
-  });
-
-  return (
-    <section className="pagina-vazia">
-      <h2 style={{ color: "#ffffff" }}>📚 Revisão Inteligente</h2>
-
-      <p
-        style={{
-          color: "#aebbd0",
-          marginBottom: 30,
-        }}
-      >
-        Estas são as questões que você já errou e deve revisar.
-      </p>
-
-      {revisar.length === 0 && (
-        <div
-          style={{
-            padding: 28,
-            borderRadius: 14,
-            background: "rgba(34, 197, 94, 0.12)",
-            border: "1px solid rgba(34, 197, 94, 0.35)",
-            color: "#dcfce7",
-          }}
-        >
-          <strong
-            style={{
-              display: "block",
-              marginBottom: 6,
-              color: "#86efac",
-              fontSize: 18,
-            }}
-          >
-            🎉 Parabéns!
-          </strong>
-
-          Você ainda não possui questões para revisar.
-        </div>
-      )}
-
-      <div
-        style={{
-          display: "grid",
-          gap: 16,
-        }}
-      >
-        {revisar.map((questao) => {
-          const progresso = obterProgressoQuestao(questao.id)!;
-
-          return (
-            <article
-              key={questao.id}
-              style={{
-                background: "rgba(15, 23, 42, 0.82)",
-                color: "#f8fafc",
-                padding: 20,
-                borderRadius: 14,
-                border: "1px solid rgba(148, 163, 184, 0.18)",
-                boxShadow: "0 14px 30px rgba(0, 0, 0, 0.18)",
-              }}
-            >
-              <strong
-                style={{
-                  display: "block",
-                  color: "#a78bfa",
-                  fontSize: 15,
-                }}
-              >
-                {questao.materia}
-              </strong>
-
-              <p
-                style={{
-                  margin: "12px 0",
-                  color: "#f8fafc",
-                  fontSize: 17,
-                  lineHeight: 1.5,
-                }}
-              >
-                {questao.pergunta}
-              </p>
-
-              <span
-                style={{
-                  display: "inline-block",
-                  padding: "7px 10px",
-                  borderRadius: 8,
-                  background: "rgba(239, 68, 68, 0.14)",
-                  color: "#fca5a5",
-                  fontWeight: 700,
-                }}
-              >
-                ❌ Erros: {progresso.erros}
-              </span>
-            </article>
-          );
-        })}
-      </div>
-    </section>
-  );
+  return <section className="review-page">
+    <div className="section-heading"><span className="pcmg-kicker">REVISÃO INTELIGENTE</span><h2>Caderno de Erros</h2><p>Reúne erros do banco de questões e dos simulados em um único lugar.</p></div>
+    {revisar.length>0&&<div className="review-summary"><article><small>Total para revisar</small><strong>{revisar.length}</strong></article><article><small>Matérias envolvidas</small><strong>{Object.keys(porMateria).length}</strong></article><article><small>Prioridade</small><strong>{Object.entries(porMateria).sort((a,b)=>b[1]-a[1])[0]?.[0]??"—"}</strong></article></div>}
+    {revisar.length===0?<div className="empty-pcmg"><strong>Caderno de erros vazio.</strong><span>Quando você errar uma questão, ela aparecerá aqui automaticamente.</span></div>:<div className="review-list">{revisar.map(q=>{const p=obterProgressoQuestao(q.id);return <article className="review-card" key={q.id}><div className="review-meta"><span>{q.materia}</span><small>{q.assunto}</small></div><h3>{q.pergunta}</h3><div className="review-footer"><span>Erros registrados: <b>{Math.max(p?.erros??0,idsSimulado.includes(q.id)?1:0)}</b></span><span className="review-tip">Revise a explicação e refaça no Simulado → Só Questões Erradas</span></div></article>})}</div>}
+  </section>;
 }
