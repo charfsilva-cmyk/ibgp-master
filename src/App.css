@@ -77,3 +77,5 @@
 @media(max-width:720px){.settings-grid{grid-template-columns:1fr}}
 
 .favorite-question{margin-left:auto;padding:6px 10px;border-radius:8px;border:1px solid rgba(212,175,82,.28);background:rgba(212,175,82,.08);color:#e2c46d;cursor:pointer;font-weight:700}
+
+.level-badge{padding:6px 9px;border-radius:8px;background:rgba(29,79,145,.18);border:1px solid rgba(96,165,250,.22);color:#bfdbfe;font-size:13px;font-weight:700}.level-badge.fgv-level{background:rgba(212,175,82,.11);border-color:rgba(212,175,82,.32);color:#f0d98b}.pcmg-filter-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
