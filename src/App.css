@@ -59,3 +59,11 @@
 .review-card{display:block}.review-meta{display:flex;align-items:center;gap:10px}.review-meta span{color:#e2c46d;font-weight:700}.review-meta small{color:#9fb0c5}.review-card h3{font-size:16px;line-height:1.5;margin:12px 0}.review-footer{display:flex;justify-content:space-between;gap:16px;color:#9fb0c5;font-size:13px}.review-tip{color:#cbd5e1}
 .empty-pcmg{display:flex;flex-direction:column;gap:6px;padding:28px;border:1px dashed rgba(212,175,82,.3);border-radius:16px;background:rgba(9,31,53,.55);color:#9fb0c5}.empty-pcmg strong{color:#f8fafc}
 @media(max-width:900px){.stats-summary,.review-summary{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.stats-summary,.review-summary{grid-template-columns:1fr}.subject-stat,.review-footer{flex-direction:column}.subject-score{text-align:left}}
+
+/* Integração de questões na Central de Estudos */
+.study-question-list{display:grid;gap:12px;margin:18px 0}
+.study-question-list article{padding:16px 18px;border-radius:14px;background:rgba(7,27,47,.72);border:1px solid rgba(148,163,184,.13);transition:border-color .2s ease,transform .2s ease}
+.study-question-list article:hover{transform:translateY(-2px);border-color:rgba(212,175,82,.36)}
+.study-question-list article>span{font-size:12px;font-weight:700;letter-spacing:.05em;color:#e2c46d}
+.study-question-list article p{margin:8px 0;color:#f1f5f9;line-height:1.5}
+.study-question-list article small{color:#91a4ba}
