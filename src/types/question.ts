@@ -1,3 +1,6 @@
+export type CargoQuestao = "Investigador" | "Escrivão" | "Ambos";
+export type OrigemQuestao = "Inédita" | "Oficial" | "Adaptada";
+
 export interface Question {
   id: number;
   materia: string;
@@ -8,4 +11,7 @@ export interface Question {
   alternativas: string[];
   correta: number;
   explicacao: string;
+  cargo?: CargoQuestao;
+  ano?: number;
+  origem?: OrigemQuestao;
 }
