@@ -122,6 +122,7 @@ export default function QuestionCard({ question }: Props) {
         >
           {question.dificuldade}
         </span>
+        {question.nivel && <span className={`level-badge ${question.nivel.includes("FGV") ? "fgv-level" : ""}`}>{question.nivel}</span>}
         <button type="button" onClick={alternarFavorita} className="favorite-question" title={favorita?"Remover dos favoritos":"Adicionar aos favoritos"}>{favorita?"★ Favorita":"☆ Favoritar"}</button>
       </div>
 
