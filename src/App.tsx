@@ -16,7 +16,7 @@ export default function App() {
   const [pagina, setPagina] = useState<MenuItem>("Painel");
   const [logged, setLogged] = useState(localStorage.getItem("pcmg-login") === "true" || localStorage.getItem("ibgp-login") === "true");
 
-  if (!logged) return <Login onLogin={() => setLogged(true)} />;
+  if (!logged) return <Login onLogin={() => { localStorage.setItem("pcmg-login", "true"); setLogged(true); }} />;
 
   const menu: MenuItem[] = ["Painel", "Estudar", "Questões", "Simulados", "Estatísticas", "Revisão", "Configurações"];
   const erros = JSON.parse(localStorage.getItem("pcmg-erros") ?? "[]") as number[];
