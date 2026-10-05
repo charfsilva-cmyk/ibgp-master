@@ -1,5 +1,6 @@
 export type CargoQuestao = "Investigador" | "Escrivão" | "Ambos";
 export type OrigemQuestao = "Inédita" | "Oficial" | "Adaptada";
+export type NivelCobranca = "Básica" | "Intermediária" | "Padrão FGV" | "FGV avançada";
 
 export interface Question {
   id: number;
@@ -14,4 +15,5 @@ export interface Question {
   cargo?: CargoQuestao;
   ano?: number;
   origem?: OrigemQuestao;
+  nivel?: NivelCobranca;
 }
