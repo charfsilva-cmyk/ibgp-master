@@ -9,8 +9,23 @@ export default function Questoes() {
   const [search, setSearch] = useState("");
   const [materia, setMateria] = useState("");
   const [somenteFavoritas, setSomenteFavoritas] = useState(false);
+  const [cargo, setCargo] = useState("Investigador");
+  const [banca, setBanca] = useState("");
+  const [ano, setAno] = useState("");
+  const [origem, setOrigem] = useState("");
 
   const materias = [...new Set(questions.map((q) => q.materia))];
+  const bancas = ["FGV", "FUMARC"];
+  const anos = ["2025", "2021", "2018"];
+
+  const meta = (question: Question) => {
+    const anyQuestion = question as Question & { cargo?: string; ano?: number; origem?: string };
+    return {
+      cargo: anyQuestion.cargo ?? "Investigador",
+      ano: String(anyQuestion.ano ?? ""),
+      origem: anyQuestion.origem ?? "Inédita",
+    };
+  };
 
   const favoritos = JSON.parse(
     localStorage.getItem("ibgp-favorites") ?? "[]",
@@ -30,11 +45,16 @@ export default function Questoes() {
 
     const correspondeFavorita =
       !somenteFavoritas || favoritos.includes(question.id);
+    const dados = meta(question);
+    const correspondeCargo = cargo === "" || dados.cargo === cargo;
+    const correspondeBanca = banca === "" || question.banca.toUpperCase().includes(banca);
+    const correspondeAno = ano === "" || dados.ano === ano;
+    const correspondeOrigem = origem === "" || dados.origem === origem;
 
     return (
       correspondeMateria &&
       correspondePesquisa &&
-      correspondeFavorita
+      correspondeFavorita && correspondeCargo && correspondeBanca && correspondeAno && correspondeOrigem
     );
   });
 
@@ -113,22 +133,27 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
         <div>
           <h2 style={{ margin: 0 }}>Banco de questões</h2>
 
-          <p className="texto-secundario">
-            Pesquise, filtre e clique em uma questão para responder.
-          </p>
+          <p className="texto-secundario">Questões PCMG organizadas por cargo, banca, ano, matéria e origem.</p>
         </div>
 
         <div
           style={{
             padding: "10px 16px",
             borderRadius: 10,
-            background: "#eff6ff",
-            color: "#1d4ed8",
+            background: "rgba(212,175,82,.12)",
+            color: "#f0d98b",
             fontWeight: 700,
           }}
         >
           {filteredQuestions.length} encontradas
         </div>
+      </div>
+
+      <div className="pcmg-filter-grid">
+        <label>Cargo<select value={cargo} onChange={e=>setCargo(e.target.value)}><option>Investigador</option><option>Escrivão</option><option value="">Todos</option></select></label>
+        <label>Banca<select value={banca} onChange={e=>setBanca(e.target.value)}><option value="">Todas</option>{bancas.map(x=><option key={x}>{x}</option>)}</select></label>
+        <label>Ano<select value={ano} onChange={e=>setAno(e.target.value)}><option value="">Todos</option>{anos.map(x=><option key={x}>{x}</option>)}</select></label>
+        <label>Origem<select value={origem} onChange={e=>setOrigem(e.target.value)}><option value="">Todas</option><option>Oficial</option><option>Inédita</option></select></label>
       </div>
 
       <FilterBar
@@ -146,9 +171,9 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
           gap: 9,
           margin: "8px 0 20px",
           padding: "10px 14px",
-          border: "1px solid #dfe3eb",
+          border: "1px solid rgba(148,163,184,.18)",
           borderRadius: 10,
-          background: "#ffffff",
+          background: "#0a1c33",
           cursor: "pointer",
           userSelect: "none",
         }}
@@ -195,10 +220,10 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
               style={{
                 width: "100%",
                 padding: 20,
-                border: "1px solid #dfe3eb",
+                border: "1px solid rgba(148,163,184,.18)",
                 borderRadius: 14,
-                background: "#ffffff",
-                color: "#172033",
+                background: "#0a1c33",
+                color: "#f8fafc",
                 textAlign: "left",
                 cursor: "pointer",
                 boxShadow: "0 3px 12px rgba(15, 23, 42, 0.05)",
@@ -215,7 +240,7 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
                 <div>
                   <strong
                     style={{
-                      color: "#2563eb",
+                      color: "#d4af52",
                       fontSize: 14,
                     }}
                   >
@@ -261,8 +286,8 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
                   style={{
                     padding: "6px 9px",
                     borderRadius: 8,
-                    background: "#f1f5f9",
-                    color: "#475569",
+                    background: "#102b49",
+                    color: "#cbd5e1",
                     fontSize: 13,
                   }}
                 >
@@ -273,8 +298,8 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
                   style={{
                     padding: "6px 9px",
                     borderRadius: 8,
-                    background: "#f1f5f9",
-                    color: "#475569",
+                    background: "#102b49",
+                    color: "#cbd5e1",
                     fontSize: 13,
                   }}
                 >
@@ -297,7 +322,7 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
                 <span
                   style={{
                     marginLeft: "auto",
-                    color: "#2563eb",
+                    color: "#d4af52",
                     fontSize: 14,
                     fontWeight: 700,
                   }}
