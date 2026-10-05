@@ -1,176 +1,31 @@
 import professor from "../assets/professor/professor.png";
-type Props = {
-  percentual: number;
-};
+import { questions } from "../data/questions";
+import { obterProgressoQuestao } from "../utils/progress";
 
-type FaixaDesempenho = {
-  titulo: string;
-  mensagem: string;
-  cor: string;
-  fundo: string;
-  borda: string;
-};
+type Props={percentual:number};
 
-export default function ProfessorVirtual({ percentual }: Props) {
-  let resultado: FaixaDesempenho;
+export default function ProfessorVirtual({percentual}:Props){
+  const erros=questions.map(q=>({q,p:obterProgressoQuestao(q.id)})).filter(x=>x.p&&x.p.erros>0);
+  const contagem=erros.reduce<Record<string,number>>((a,x)=>{a[x.q.materia]=(a[x.q.materia]||0)+(x.p?.erros||0);return a},{});
+  const prioridade=Object.entries(contagem).sort((a,b)=>b[1]-a[1])[0]?.[0];
+  const temHistorico=erros.length>0||percentual>0;
+  const mensagem=!temHistorico
+    ?"Comece resolvendo questões. Conforme seus resultados forem registrados, vou indicar automaticamente o que merece prioridade."
+    :prioridade
+      ?`Sua prioridade de revisão é ${prioridade}. Revise a teoria, confira seu caderno de erros e depois faça um novo bloco de questões.`
+      :"Seu desempenho não aponta erros pendentes. Continue alternando teoria, questões e simulados.";
 
-  if (percentual >= 90) {
-    resultado = {
-      titulo: "🏆 Excelente!",
-      mensagem:
-        "Seu desempenho está excelente. Continue resolvendo simulados completos para manter o nível.",
-      cor: "#166534",
-      fundo: "#f0fdf4",
-      borda: "#86efac",
-    };
-  } else if (percentual >= 75) {
-    resultado = {
-      titulo: "😊 Muito bom!",
-      mensagem:
-        "Você está evoluindo bem. Revise apenas as questões erradas antes de seguir.",
-      cor: "#1d4ed8",
-      fundo: "#eff6ff",
-      borda: "#93c5fd",
-    };
-  } else if (percentual >= 60) {
-    resultado = {
-      titulo: "📚 Atenção",
-      mensagem:
-        "Seu desempenho é bom, mas ainda há espaço para melhorar. Faça revisões frequentes.",
-      cor: "#a16207",
-      fundo: "#fefce8",
-      borda: "#fde047",
-    };
-  } else if (percentual >= 40) {
-    resultado = {
-      titulo: "⚠️ Precisa reforçar",
-      mensagem:
-        "Recomendamos voltar à teoria e resolver questões fáceis antes de avançar.",
-      cor: "#c2410c",
-      fundo: "#fff7ed",
-      borda: "#fdba74",
-    };
-  } else {
-    resultado = {
-           titulo: "🎯 Comece seus estudos",
-mensagem:
-  "Você ainda não possui respostas registradas. Resolva algumas questões para receber uma análise do seu desempenho.",
-      cor: "#b91c1c",
-      fundo: "#fef2f2",
-      borda: "#fca5a5",
-    };
-  }
-
-  return (
-    <div
-      style={{
-        marginTop: 20,
-        padding: 24,
-        borderRadius: 14,
-        background: resultado.fundo,
-        border: `2px solid ${resultado.borda}`,
-        color: "#111827",
-        boxShadow: "0 4px 14px rgba(15, 23, 42, 0.08)",
-      }}
-    ><div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: 18,
-    marginBottom: 18,
-  }}
->
-  <img
-    src={professor}
-    alt="Professor Virtual"
-    style={{
-      width: 180,
-height: 180,
-objectFit: "contain",
-background: "#0f172a",
-     borderRadius: 24,
-      border: "3px solid #6366f1",
-      boxShadow: "0 8px 24px rgba(79, 70, 229, 0.25)",
-    }}
-  />
-
-  <div>
-    <strong
-      style={{
-        display: "block",
-        fontSize: 24,
-        color: "#1e1b4b",
-      }}
-    >
-      🤖 Professor Virtual
-    </strong>
-
-    <span
-      style={{
-        display: "block",
-        marginTop: 6,
-        color: "#64748b",
-        fontSize: 15,
-      }}
-    >
-      Seu mentor de estudos
-    </span>
-  </div>
-</div>
-      <h3
-        style={{
-          margin: 0,
-          color: resultado.cor,
-          fontSize: 20,
-          fontWeight: 700,
-        }}
-      >
-        {resultado.titulo}
-      </h3>
-
-      <p
-        style={{
-          marginTop: 12,
-          marginBottom: 0,
-          lineHeight: 1.7,
-          color: "#374151",
-          fontSize: 16,
-          fontWeight: 500,
-        }}
-      >
-        {resultado.mensagem}
-      </p>
-
-      <div
-        style={{
-          marginTop: 18,
-          height: 8,
-          borderRadius: 999,
-          background: "#e5e7eb",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            width: `${Math.min(100, Math.max(0, percentual))}%`,
-            height: "100%",
-            borderRadius: 999,
-            background: resultado.cor,
-            transition: "width 0.3s ease",
-          }}
-        />
-      </div>
-
-      <small
-        style={{
-          display: "block",
-          marginTop: 8,
-          color: "#475569",
-          fontWeight: 600,
-        }}
-      >
-        Aproveitamento atual: {percentual}%
-      </small>
+  return <section className="professor-pcmg">
+    <div className="professor-head">
+      <img src={professor} alt="Professor Virtual PCMG"/>
+      <div><span className="pcmg-kicker">ASSISTENTE DE ESTUDOS</span><h3>Professor Virtual PCMG</h3><p>Orientação baseada no seu desempenho dentro da plataforma.</p></div>
     </div>
-  );
+    <div className="professor-analysis"><small>ANÁLISE ATUAL</small><p>{mensagem}</p>{temHistorico&&<span>Aproveitamento registrado: <b>{percentual}%</b></span>}</div>
+    <div className="professor-tools">
+      <article><span>📖</span><div><strong>Explicar matéria</strong><small>Use a Central de Estudos para teoria, resumo e mapa mental.</small></div></article>
+      <article><span>❌</span><div><strong>Revisar erros</strong><small>{erros.length} questão(ões) identificada(s) para reforço.</small></div></article>
+      <article><span>🎯</span><div><strong>Treinar para a prova</strong><small>Faça blocos por matéria ou use o modo prova.</small></div></article>
+    </div>
+    <small className="professor-note">O Professor Virtual é um recurso de apoio da plataforma independente PCMG Master e não representa a Polícia Civil de Minas Gerais.</small>
+  </section>;
 }
