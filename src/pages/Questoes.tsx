@@ -15,20 +15,20 @@ export default function Questoes() {
   const [origem, setOrigem] = useState("");
 
   const materias = [...new Set(questions.map((q) => q.materia))];
-  const bancas = ["FGV", "FUMARC"];
-  const anos = ["2025", "2021", "2018"];
+  const bancas = [...new Set(questions.map(q => q.banca))].sort();
+  const anos = [...new Set(questions.map(q => q.ano).filter((x): x is number => typeof x === "number"))].sort((a,b)=>b-a).map(String);
 
   const meta = (question: Question) => {
     const anyQuestion = question as Question & { cargo?: string; ano?: number; origem?: string };
     return {
-      cargo: anyQuestion.cargo ?? "Investigador",
+      cargo: anyQuestion.cargo ?? "Ambos",
       ano: String(anyQuestion.ano ?? ""),
       origem: anyQuestion.origem ?? "Inédita",
     };
   };
 
   const favoritos = JSON.parse(
-    localStorage.getItem("ibgp-favorites") ?? "[]",
+    localStorage.getItem("pcmg-favorites") ?? localStorage.getItem("ibgp-favorites") ?? "[]",
   ) as number[];
 
   const termo = search.trim().toLowerCase();
@@ -46,7 +46,7 @@ export default function Questoes() {
     const correspondeFavorita =
       !somenteFavoritas || favoritos.includes(question.id);
     const dados = meta(question);
-    const correspondeCargo = cargo === "" || dados.cargo === cargo;
+    const correspondeCargo = cargo === "" || dados.cargo === cargo || dados.cargo === "Ambos";
     const correspondeBanca = banca === "" || question.banca.toUpperCase().includes(banca);
     const correspondeAno = ano === "" || dados.ano === ano;
     const correspondeOrigem = origem === "" || dados.origem === origem;
@@ -89,7 +89,7 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
       padding: 14,
       border: "none",
       borderRadius: 10,
-      background: "#4f46e5",
+      background: "#1d4f91",
       color: "#ffffff",
       fontSize: 16,
       fontWeight: 700,
@@ -153,7 +153,7 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
         <label>Cargo<select value={cargo} onChange={e=>setCargo(e.target.value)}><option>Investigador</option><option>Escrivão</option><option value="">Todos</option></select></label>
         <label>Banca<select value={banca} onChange={e=>setBanca(e.target.value)}><option value="">Todas</option>{bancas.map(x=><option key={x}>{x}</option>)}</select></label>
         <label>Ano<select value={ano} onChange={e=>setAno(e.target.value)}><option value="">Todos</option>{anos.map(x=><option key={x}>{x}</option>)}</select></label>
-        <label>Origem<select value={origem} onChange={e=>setOrigem(e.target.value)}><option value="">Todas</option><option>Oficial</option><option>Inédita</option></select></label>
+        <label>Origem<select value={origem} onChange={e=>setOrigem(e.target.value)}><option value="">Todas</option><option>Oficial</option><option>Inédita</option><option>Adaptada</option></select></label>
       </div>
 
       <FilterBar
