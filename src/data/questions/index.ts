@@ -33,6 +33,8 @@ const pcmgBase = [
 
 export const questions = pcmgBase.map((question) => ({
   ...question,
+  cargo: question.cargo ?? "Ambos",
+  origem: question.origem ?? "Inédita",
   banca:
     question.banca.toLowerCase().includes("ibgp") ||
     question.banca.toLowerCase().includes("adapt")
