@@ -1,4 +1,5 @@
 import Login from "./pages/Login";
+import Estudar from "./pages/Estudar";
 import Revisao from "./pages/Revisao";
 import Configuracoes from "./pages/Configuracoes";
 import Estatisticas from "./pages/Estatisticas";
@@ -9,6 +10,7 @@ import Questoes from "./pages/Questoes";
 import ProfessorVirtual from "./components/ProfessorVirtual";
 type MenuItem =
   | "Painel"
+  | "Estudar"
   | "Questões"
   | "Simulados"
   | "Estatísticas"
@@ -30,6 +32,7 @@ if (!logged) {
 }
 const menu: MenuItem[] = [
     "Painel",
+    "Estudar",
     "Questões",
     "Simulados",
     "Estatísticas",
@@ -97,7 +100,7 @@ const menu: MenuItem[] = [
       })
       .join("\n");
 
-    return `RESULTADO IBGP MASTER
+    return `RESULTADO PCMG MASTER
 Questões: ${questions.length}
 Acertos: ${correctCount}
 Erros: ${questions.length - correctCount}
@@ -200,7 +203,7 @@ ${answerText}`;
       color: "#64748b",
     }}
   >
-    Seu assistente de preparação IBGP.
+    Seu assistente de preparação para a PCMG.
   </small>
 </article>
 <article className="card">
@@ -492,7 +495,7 @@ ${answerText}`;
           <div>
             <span className="etiqueta">Simulado recomendado</span>
 
-            <h2>Treino inicial GCM Brumadinho — estilo IBGP</h2>
+            <h2>Treino inicial Polícia Civil de Minas Gerais — estilo PCMG / FGV</h2>
 
             <p>
               Responda clicando nas alternativas. Ao finalizar, copie o
@@ -760,11 +763,11 @@ ${answerText}`;
   <div className="app">
     <aside className="sidebar">
           <div className="logo">
-          <span className="logo-icon">I</span>
+          <span className="logo-icon">PC</span>
 
           <div>
-            <strong>IBGP Master</strong>
-            <small>GCM Brumadinho</small>
+            <strong>PCMG Master</strong>
+            <small>Polícia Civil de Minas Gerais</small>
           </div>
         </div>
 
@@ -802,6 +805,7 @@ ${answerText}`;
           </button>
         </header>
 {pagina === "Painel" && renderDashboard()}
+{pagina === "Estudar" && <Estudar />}
 
 {pagina === "Questões" && <Questoes />}
 {pagina === "Revisão" && <Revisao />}
