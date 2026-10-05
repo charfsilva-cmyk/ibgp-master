@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { questions } from "../data/questions";
 
 type Cargo = "Investigador" | "Escrivão";
 type Materia = { nome:string; icon:string; foco:string; topicos:string[]; resumo:string; lei:string };
@@ -26,6 +27,7 @@ export default function Estudar(){
  const [materia,setMateria]=useState<Materia|null>(null);
  const [aba,setAba]=useState("Teoria");
  const materias=useMemo(()=>cargo==="Investigador"?base:[...base,...escrivaoExtras],[cargo]);
+ const questoesMateria=materia?questions.filter(q=>q.materia===materia.nome):[];
 
  if(materia) return <div className="estudo-page">
    <button className="voltar-estudo" onClick={()=>setMateria(null)}>← Voltar às matérias</button>
@@ -37,7 +39,7 @@ export default function Estudar(){
       {aba==="Resumo" && <><h3>Resumo estratégico</h3><p>{materia.resumo}</p><div className="dica-prova">💡 Ao terminar, faça questões sem consultar o material e anote os erros.</div></>}
       {aba==="Mapa mental" && <><h3>Mapa mental</h3><div className="mindmap"><strong>{materia.nome}</strong><div>{materia.topicos.map(t=><span key={t}>{t}</span>)}</div></div></>}
       {aba==="Lei seca" && <><h3>Leitura de lei seca</h3><p>{materia.lei}</p><div className="dica-prova">⚖️ Marque palavras de exceção, prazos, competências e requisitos.</div></>}
-      {aba==="Questões" && <><h3>Treino por questões</h3><p>O próximo passo desta matéria será abrir diretamente o banco filtrado por <b>{materia.nome}</b>.</p><div className="dica-prova">📝 Base principal de Investigador: concurso PCMG Edital 04/2024, prova FGV aplicada em 26/01/2025.</div></>}
+      {aba==="Questões" && <><h3>Questões de {materia.nome}</h3><p>Há <b>{questoesMateria.length}</b> questão(ões) desta matéria no banco ativo.</p>{questoesMateria.length===0?<div className="empty-pcmg"><strong>Banco em expansão</strong><span>Esta disciplina já está no roteiro de estudos e receberá novas questões.</span></div>:<div className="study-question-list">{questoesMateria.slice(0,5).map((q,i)=><article key={q.id}><span>Questão {i+1} • {q.assunto}</span><p>{q.pergunta}</p><small>{q.banca} • {q.dificuldade}</small></article>)}</div>}<div className="dica-prova">📝 Use estas questões para testar o conteúdo sem consultar o resumo.</div></>}
       {aba==="Revisão" && <><h3>Revisão ativa</h3><div className="review-plan"><span><b>24h</b> releia o resumo</span><span><b>7 dias</b> refaça questões erradas</span><span><b>30 dias</b> faça revisão geral</span></div></>}
     </div>
    </section>
