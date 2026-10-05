@@ -7,6 +7,7 @@ import { portuguesQuestions } from "./portugues";
 import { administrativoQuestions } from "./administrativo";
 import { mariaPenhaQuestions } from "./mariaPenha";
 import { ecaQuestions } from "./eca";
+import { pcmgEspecificasQuestions } from "./pcmgEspecificas";
 
 /*
  * Banco ativo do PCMG Master.
@@ -27,6 +28,7 @@ const pcmgBase = [
   ...administrativoQuestions,
   ...mariaPenhaQuestions,
   ...ecaQuestions,
+  ...pcmgEspecificasQuestions,
 ];
 
 export const questions = pcmgBase.map((question) => ({
