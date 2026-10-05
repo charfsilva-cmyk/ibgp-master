@@ -24,7 +24,7 @@ export default function Login({ onLogin }: Props) {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        background: "#0f172a",
+        background: "linear-gradient(135deg, #061426, #0b315d)",
       }}
     >
       <div
@@ -36,7 +36,7 @@ export default function Login({ onLogin }: Props) {
           boxShadow: "0 10px 40px rgba(0,0,0,.25)",
         }}
       >
-        <h2>IBGP Master</h2>
+        <h2>PCMG Master</h2>
 
         <p>Entre para continuar.</p>
 
