@@ -1,83 +1,200 @@
 import { useState } from "react";
-
-type Props = {
-  onLogin: () => void;
-};
-
-export default function Login({ onLogin }: Props) {
-  const [usuario, setUsuario] = useState("");
+import { supabase } from "../utils/cloud";
+export default function Login({ onLogin }: { onLogin: () => void }) {
+  const [confirmation, setConfirmation] = useState("");
+  const [awaiting, setAwaiting] = useState(false);
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-
-  function entrar() {
-    if (usuario.trim().toLowerCase() === "admin" && senha.trim() === "123456") {
-      localStorage.setItem("pcmg-login", "true");
-      localStorage.setItem("ibgp-login", "true");
+  const [nome, setNome] = useState("");
+  const [cadastro, setCadastro] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
+  async function entrar(e: React.SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setBusy(true);
+    setMessage("");
+    try {
+      const result = cadastro
+        ? await supabase.auth.signUp({
+            email,
+            password: senha,
+            options: { data: { display_name: nome } },
+          })
+        : await supabase.auth.signInWithPassword({ email, password: senha });
+      if (result.error) {
+        setMessage(result.error.message);
+        return;
+      }
+      if (!result.data.session) {
+        setAwaiting(true);
+        setMessage(
+          "Cadastro recebido. Confira seu e-mail para confirmar a conta e depois entre.",
+        );
+        return;
+      }
+      localStorage.removeItem("pcmg-guest");
       onLogin();
-    } else {
-      alert("Usuário ou senha incorretos.");
+    } catch {
+      setMessage(
+        "Não foi possível conectar. Verifique a conexão e tente novamente.",
+      );
+    } finally {
+      setBusy(false);
     }
   }
-
+  async function confirmar() {
+    setBusy(true);
+    try {
+      const url = new URL(confirmation);
+      const token =
+        url.searchParams.get("token_hash") || url.searchParams.get("token");
+      if (!token) {
+        setMessage("Cole o link completo do e-mail de confirmação.");
+        return;
+      }
+      const { error } = await supabase.auth.verifyOtp({
+        token_hash: token,
+        type: "signup",
+      });
+      if (error) {
+        setMessage(
+          "Link inválido ou expirado. Tente entrar para verificar se a conta já foi confirmada.",
+        );
+        return;
+      }
+      localStorage.removeItem("pcmg-guest");
+      onLogin();
+    } catch {
+      setMessage("Não foi possível confirmar. Confira o link e a conexão.");
+    } finally {
+      setBusy(false);
+    }
+  }
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        background: "linear-gradient(135deg, #061426, #0b315d)",
-      }}
-    >
-      <div
-        style={{
-          width: 380,
-          background: "white",
-          padding: 35,
-          borderRadius: 18,
-          boxShadow: "0 10px 40px rgba(0,0,0,.25)",
-        }}
-      >
-        <h2>PCMG Master</h2>
-
-        <p>Entre para continuar.</p>
-
-        <input
-          placeholder="Usuário"
-          value={usuario}
-          onChange={(e) => setUsuario(e.target.value)}
-          style={{
-            width: "100%",
-            padding: 12,
-            marginTop: 20,
-          }}
-        />
-
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          style={{
-            width: "100%",
-            padding: 12,
-            marginTop: 12,
-          }}
-        />
-
-        <div style={{marginTop:16,padding:12,borderRadius:10,background:"#f1f5f9",color:"#172033"}}><small>Usuário</small><strong style={{display:"block"}}>admin</strong><small>Senha</small><strong style={{display:"block"}}>123456</strong></div>
-
+    <div className="login-pcmg">
+      <section className="login-story">
+        <span className="pcmg-kicker">SEU OBJETIVO. SEU MÉTODO.</span>
+        <h1>
+          Uma preparação
+          <br />à altura da sua
+          <br />
+          <em>próxima conquista.</em>
+        </h1>
+        <p>Investigador e Escrivão • Polícia Civil de Minas Gerais</p>
+        <div className="story-tags">
+          <span>Estudo ativo</span>
+          <span>Revisão inteligente</span>
+          <span>Progresso individual</span>
+        </div>
+        <small>
+          Plataforma independente de estudos. Sem vínculo institucional com a
+          PCMG.
+        </small>
+      </section>
+      <section className="login-card">
+        <div className="login-brand">
+          <span>PC</span>
+          <div>
+            <h2>PCMG Master</h2>
+            <small>Preparação com direção</small>
+          </div>
+        </div>
+        <h3>{cadastro ? "Comece sua preparação" : "Bom ter você de volta"}</h3>
+        <p>
+          {cadastro
+            ? "Crie sua conta para guardar seu progresso."
+            : "Entre para retomar seus estudos."}
+        </p>
+        <form onSubmit={entrar}>
+          {cadastro && (
+            <label>
+              Nome
+              <input
+                required
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                autoComplete="name"
+              />
+            </label>
+          )}
+          <label>
+            E-mail
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+            />
+          </label>
+          <label>
+            Senha
+            <input
+              type="password"
+              minLength={6}
+              required
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              autoComplete={cadastro ? "new-password" : "current-password"}
+            />
+          </label>
+          <button disabled={busy} className="botao-principal">
+            {busy
+              ? "Aguarde…"
+              : cadastro
+                ? "Criar conta"
+                : "Entrar na minha conta"}
+          </button>
+        </form>
+        {awaiting && (
+          <div className="confirmation-help">
+            <p>
+              Se o link recebido abrir uma página indisponível, copie o link do
+              e-mail e confirme aqui:
+            </p>
+            <input
+              aria-label="Link de confirmação"
+              value={confirmation}
+              onChange={(e) => setConfirmation(e.target.value)}
+              placeholder="Cole o link de confirmação"
+            />
+            <button
+              type="button"
+              disabled={busy || !confirmation}
+              onClick={() => {
+                void confirmar();
+              }}
+            >
+              Confirmar minha conta
+            </button>
+          </div>
+        )}
+        {message && (
+          <p role="status" className="login-message">
+            {message}
+          </p>
+        )}
         <button
-          onClick={entrar}
-          style={{
-            width: "100%",
-            marginTop: 20,
-            padding: 14,
-            cursor: "pointer",
+          className="text-button"
+          onClick={() => {
+            setCadastro(!cadastro);
+            setMessage("");
           }}
         >
-          Entrar
+          {cadastro ? "Já tenho uma conta" : "Criar minha conta"}
         </button>
-      </div>
+        <div className="guest-access">
+          <button
+            onClick={() => {
+              localStorage.setItem("pcmg-guest", "true");
+              onLogin();
+            }}
+          >
+            Experimentar sem conta →
+          </button>
+          <small>Modo local: os dados ficam somente neste navegador.</small>
+        </div>
+      </section>
     </div>
   );
 }

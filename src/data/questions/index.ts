@@ -35,9 +35,13 @@ const pcmgBase = [
 
 export const questions = pcmgBase.map((question) => ({
   ...question,
+  materia:
+    question.materia === "Português" ? "Língua Portuguesa" : question.materia,
   cargo: question.cargo ?? "Ambos",
   origem: question.origem ?? "Inédita",
-  nivel: question.nivel ?? (question.dificuldade === "Fácil" ? "Básica" : "Intermediária"),
+  nivel:
+    question.nivel ??
+    (question.dificuldade === "Fácil" ? "Básica" : "Intermediária"),
   banca:
     question.banca.toLowerCase().includes("ibgp") ||
     question.banca.toLowerCase().includes("adapt")

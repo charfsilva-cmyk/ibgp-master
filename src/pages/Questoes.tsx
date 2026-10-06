@@ -9,7 +9,7 @@ export default function Questoes() {
   const [search, setSearch] = useState("");
   const [materia, setMateria] = useState("");
   const [somenteFavoritas, setSomenteFavoritas] = useState(false);
-  const [cargo, setCargo] = useState("Investigador");
+  const [cargo, setCargo] = useState(localStorage.getItem("pcmg-cargo")??"Investigador");
   const [banca, setBanca] = useState("");
   const [ano, setAno] = useState("");
   const [origem, setOrigem] = useState("");
@@ -76,7 +76,7 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
           ← Voltar ao banco
         </button>
 
-        <QuestionCard question={questaoAberta} />
+        <QuestionCard key={questaoAberta.id} question={questaoAberta} />
         {proximaQuestao ? (
   <button
     type="button"
@@ -176,7 +176,7 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
           padding: "10px 14px",
           border: "1px solid rgba(148,163,184,.18)",
           borderRadius: 10,
-          background: "#0a1c33",
+          background: "var(--surface)",
           cursor: "pointer",
           userSelect: "none",
         }}
@@ -225,8 +225,8 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
                 padding: 20,
                 border: "1px solid rgba(148,163,184,.18)",
                 borderRadius: 14,
-                background: "#0a1c33",
-                color: "#f8fafc",
+                background: "var(--surface)",
+                color: "var(--text)",
                 textAlign: "left",
                 cursor: "pointer",
                 boxShadow: "0 3px 12px rgba(15, 23, 42, 0.05)",
@@ -289,8 +289,8 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
                   style={{
                     padding: "6px 9px",
                     borderRadius: 8,
-                    background: "#102b49",
-                    color: "#cbd5e1",
+                    background: "var(--surface2)",
+                    color: "var(--muted)",
                     fontSize: 13,
                   }}
                 >
@@ -301,8 +301,8 @@ const proximaQuestao = filteredQuestions[indiceAtual + 1];
                   style={{
                     padding: "6px 9px",
                     borderRadius: 8,
-                    background: "#102b49",
-                    color: "#cbd5e1",
+                    background: "var(--surface2)",
+                    color: "var(--muted)",
                     fontSize: 13,
                   }}
                 >
